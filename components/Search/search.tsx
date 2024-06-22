@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import * as FileSystem from 'expo-file-system';
 import { SearchItems } from './searchItems';
 
-export function Search() {
+export function Search({ onResultClick } : { onResultClick: (id: string) => void }) {
     const [text, onChangeText] = useState('');
     const [items, setItems] = useState<any>([]);
     return (
@@ -19,7 +19,7 @@ export function Search() {
                     getItems();
                 }} />
             </View>
-            <SearchItems items={items} />
+            <SearchItems items={items} onResultClick={onResultClick}/>
         </>
     );
 }
