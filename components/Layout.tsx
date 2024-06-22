@@ -4,12 +4,12 @@ import { FontAwesome } from '@expo/vector-icons';
 
 export function Layout({ title, children }: { title: string, children: React.ReactNode }) {
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-        <View className="flex-row justify-between items-center p-4">
-            <Text>{title}</Text>
-            <FontAwesome name="search" size={24} color="black" />
-        </View>
-        {children}
+        <SafeAreaView className="px-2">
+            <View className="flex flex-row justify-between">
+                <Text className="text-3xl">{title}</Text>
+                <FontAwesome name="search" size={24} color="black" />
+            </View>
+            {children}
         </SafeAreaView>
     );
 }
