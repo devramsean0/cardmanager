@@ -3824,6 +3824,7 @@ __metadata:
     expo: "npm:~51.0.14"
     expo-constants: "npm:~16.0.2"
     expo-dev-client: "npm:~4.0.18"
+    expo-file-system: "npm:~17.0.1"
     expo-font: "npm:~12.0.7"
     expo-linking: "npm:~6.3.1"
     expo-router: "npm:~3.5.16"

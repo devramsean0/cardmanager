@@ -1,13 +1,15 @@
 import { Layout } from "@/components/Layout";
 import { Text, View } from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 export default function DecksScreen() {
     return (
         <Layout title="Settings">
-            <View className="flex flex-col justify-center m-4 border-gray">
-                <FontAwesome name="github" size={48} />
-                <FontAwesome name="linkedin" size={48} />
+            <View className="flex flex-row justify-center m-4">
+                <Link href="https://codeberg.org/devramsean0/cardmanager">
+                    <FontAwesome name="github" size={48} />
+                </Link>
             </View>
         </Layout>
     );
