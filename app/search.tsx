@@ -7,6 +7,7 @@ export default function SearchScreen() {
     return (
         <Layout title="Search">
             <Search />
+
         </Layout>
     );
 }

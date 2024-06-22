@@ -29,9 +29,6 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
   useEffect(() => {
     const downloadLocation = `${FSDirs.dataDump}/data.json`;
     const checkIfFileExists = async () => {
@@ -39,6 +36,7 @@ export default function RootLayout() {
         const file = await FileSystem.getInfoAsync(downloadLocation);
         if (file.exists) {
           console.log('Data file exists')
+          console.log(await FileSystem.readAsStringAsync(downloadLocation));
           setDownloading(false);
           return true;
         } else {
@@ -73,6 +71,9 @@ export default function RootLayout() {
       }
     });
   }, [downloading]);
+  if (!loaded) {
+    return null;
+  }
   if (downloading) {
     return (
       <SafeAreaView>
