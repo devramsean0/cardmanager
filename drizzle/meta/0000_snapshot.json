@@ -1,12 +1,71 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "5da3ea1e-16f1-44b7-a4be-057b727fd881",
+  "id": "6fe39435-6944-4594-9804-4ce6ca2434e2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "card": {
+      "name": "card",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "collection_id": {
+          "name": "collection_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "card_data": {
+          "name": "card_data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "card_collection_id_collection_id_fk": {
+          "name": "card_collection_id_collection_id_fk",
+          "tableFrom": "card",
+          "tableTo": "collection",
+          "columnsFrom": [
+            "collection_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "collection": {
       "name": "collection",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true,
+          "default": 0
+        },
         "name": {
           "name": "name",
           "type": "text",

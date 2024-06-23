@@ -20,7 +20,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <FontAwesome name="home" size={24} color={color} />
+            <FontAwesome name="home" size={24} color={focused ? "#000000" : color} />
           ),
         }}
       />
@@ -29,7 +29,7 @@ export default function TabLayout() {
         options={{
           title: 'Collections',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="albums" color={color} />
+            <TabBarIcon name="albums" color={focused ? "#000000" : color} />
           ),
         }}
       />
@@ -38,7 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'Decks',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name='albums' color={color} />
+            <TabBarIcon name='albums' color={focused ? "#000000" : color} />
           ),
         }}
       />
@@ -47,7 +47,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="settings" color={color} />
+            <TabBarIcon name="settings" color={focused ? "#000000" : color} />
           ),
         }}
       />
