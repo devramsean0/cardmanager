@@ -4,6 +4,7 @@ import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -19,7 +20,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <FontAwesome name="home" size={24} color={color} />
           ),
         }}
       />
@@ -28,7 +29,7 @@ export default function TabLayout() {
         options={{
           title: 'Collections',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'albums' : 'albums-outline'} color={color} />
+            <TabBarIcon name="albums" color={color} />
           ),
         }}
       />
@@ -37,7 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'Decks',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'albums' : 'albums-outline'} color={color} />
+            <TabBarIcon name='albums' color={color} />
           ),
         }}
       />
@@ -46,7 +47,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+            <TabBarIcon name="settings" color={color} />
           ),
         }}
       />
