@@ -12,6 +12,8 @@ export default function CollectionScreen() {
     const { id } = useLocalSearchParams();
     const [collection, setCollection ] = useState<any>(null);
     const [showEditModal, toggleEditModal] = useState(false);
+    const [cards, setCards] = useState<any[]>([]);
+    const [showAddCardModal, toggleAddCardModal] = useState(false);
     useEffect(() => {
         const getCollection = async () => {
             const collection = await db.query.collections.findFirst({
@@ -21,6 +23,7 @@ export default function CollectionScreen() {
                 where: eq(collections.id, Number(id))
             })
             setCollection(collection);
+            setCards(collection?.cards || []);
         }
         getCollection();
         }, []);
@@ -52,6 +55,16 @@ export default function CollectionScreen() {
                 <FontAwesome name="trash" size={24} color="black" onPress={deleteCollection} />
             </View>
             <Text>{collection.name} - {collection.type}</Text>
+            <View className="flex flex-col items-center">
+                <Text className="text-lg">Cards</Text>
+                <View className="flex flex-row justify-between">
+                    <FontAwesome name="plus" size={24} color="black"/>
+                    <FontAwesome name="trash" size={24} color="black"/>
+                </View>
+                {cards.map(card => (
+                    <Text key={card.id}>{card.front} - {card.back}</Text>
+                ))}
+            </View>
         </Layout>
     )
 }

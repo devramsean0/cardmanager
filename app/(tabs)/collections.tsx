@@ -12,10 +12,23 @@ export default function CollectionScreen() {
     const [collectionType, setCollectionType] = useState<'collection' | 'deck'>('collection');
 
     const createCollection = async () => {
-        const collection = await db.insert(collections).values({ name: collectionName, type: collectionType}).returning();
-        //router.push(`/collection/${collection.id}`)
-        setCollections([...existingCollections, collection]);
+        try {
+            const [collection] = await db.insert(collections).values({ name: collectionName, type: collectionType }).returning();
+            console.log('New collection created:', collection);
+            if (collection) {
+                setCollections(prevCollections => {
+                    const updatedCollections = [...prevCollections, collection];
+                    console.log('Updated collections:', updatedCollections);
+                    return updatedCollections;
+                });
+            }
+            setCreateModalVisible(false);
+            router.push(`/collection/${collection.id}`);
+        } catch (error) {
+            console.error('Error creating collection:', error);
+        }
     }
+
     const fetchCollections = async () => {
         const list = await db.query.collections.findMany();
         setCollections(list);
@@ -23,7 +36,6 @@ export default function CollectionScreen() {
     useEffect(() => { 
         fetchCollections();
     }, []);
-
     return (
         <Layout title="Collection">
             <Modal
