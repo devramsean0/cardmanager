@@ -9,7 +9,7 @@ export default function SearchScreen() {
     return (
         <Layout title="Search">
             <Search onResultClick={(id) => {
-                router.replace(`/card/${id}`)
+                router.push(`/card/${id}`)
             }}/>
 
         </Layout>
