@@ -6,6 +6,12 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { db } from '@/db';
+import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import migrations from '@/drizzle/migrations';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -23,7 +29,27 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  
+  const { success, error } = useMigrations(db, migrations);
+
+  if (error) {
+    return (
+      <SafeAreaView>
+        <View>
+          <Text>Migration Error: {error.message}</Text>
+        </View>
+      </SafeAreaView>
+    )
+  }
+
+  if (!success) {
+    return (
+      <SafeAreaView>
+        <View>
+          <Text>Migrating...</Text>
+        </View>
+      </SafeAreaView>
+    )
+  }
   if (!loaded) {
     return null;
   }
