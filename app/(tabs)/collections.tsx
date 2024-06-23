@@ -15,7 +15,6 @@ export default function CollectionScreen() {
         const collection = await db.insert(collections).values({ name: collectionName, type: collectionType}).returning();
         //router.push(`/collection/${collection.id}`)
         setCollections([...existingCollections, collection]);
-        console.log(collection);
     }
     const fetchCollections = async () => {
         const list = await db.query.collections.findMany();
