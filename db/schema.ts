@@ -8,10 +8,12 @@ export const collections = sqliteTable("collection", {
 })
 
 export const cards = sqliteTable("card", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
     name: text("name"),
     collectionId: integer('collection_id').references(() => collections.id),
-    type: text("type").$type<"card" | "token">(),
+    quantity: integer('quantity'),
     cardData: text('card_data').$type<'json'>(),
+    type: text("type").$type<"card" | "token">(),
 })
 
 export const collectionRelation = relations(collections, ({ many }) => ({
