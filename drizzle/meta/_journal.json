@@ -8,6 +8,13 @@
       "when": 1719224267090,
       "tag": "0000_eager_paladin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1719233541606,
+      "tag": "0001_young_shadowcat",
+      "breakpoints": true
     }
   ]
 }

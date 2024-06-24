@@ -4,7 +4,7 @@ import { Button, Modal, Text, View, TextInput } from 'react-native';
 import { useEffect, useState } from "react";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
-import { collections, cards } from "@/db/schema";
+import { collections, cards, decks } from "@/db/schema";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "@/components/Search/search";
@@ -15,7 +15,7 @@ export default function CollectionScreen() {
     const [showEditModal, toggleEditModal] = useState(false);
     const [existingCards, setCards] = useState<any[]>([]);
     const [showAddCardModal, toggleAddCardModal] = useState(false);
-
+    const [isDeck, toggleDeck] = useState(false);
     const [cardName, setCardName] = useState('');
     const [cardQuantity, setCardQuantity] = useState(1);
     useEffect(() => {
@@ -28,6 +28,7 @@ export default function CollectionScreen() {
             })
             setCollection(collection);
             setCards(collection?.cards || []);
+            if (collection?.type == 'deck') toggleDeck(true);
         }
         getCollection();
         }, []);
@@ -50,6 +51,23 @@ export default function CollectionScreen() {
     const deleteCard = async (cardId: number) => {
         await db.delete(cards).where(eq(cards.id, cardId));
         setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+    }
+    const toggleDeckState = async () => {
+        if (isDeck == false) {
+            const [deck] = await db.insert(decks).values({ collectionId: collection.id }).returning();
+            await db.update(collections).set({ type: 'deck' }).where(eq(collections.id, collection.id));
+            if (deck) {
+                console.log('Collection upgraded to deck', deck);
+                toggleDeck(true);
+            }
+        } else {
+            const [deck] = await db.delete(decks).where(eq(decks.collectionId, collection.id)).returning();
+            await db.update(collections).set({ type: 'collection' }).where(eq(collections.id, collection.id));
+            if (deck) {
+                console.log('Deck downgraded to collection', deck);
+                toggleDeck(false);
+            }
+        }
     }
     if (collection == null) return null;
     return (
@@ -92,6 +110,7 @@ export default function CollectionScreen() {
             <View className="flex flex-row justify-between">
                 <FontAwesome name="edit" size={24} color="black" onPress={() => toggleEditModal(true)}/>
                 <FontAwesome name="trash" size={24} color="black" onPress={deleteCollection} />
+                <Button title={isDeck ? 'Downgrade to collection' : 'Upgrade to deck'} onPress={toggleDeckState} />
             </View>
             <Text>{collection.name} - {collection.type}</Text>
             <View className="flex flex-col items-center">

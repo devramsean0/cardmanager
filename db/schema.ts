@@ -16,8 +16,15 @@ export const cards = sqliteTable("card", {
     type: text("type").$type<"card" | "token">(),
 })
 
-export const collectionRelation = relations(collections, ({ many }) => ({
-    cards: many(cards)
+export const decks = sqliteTable("deck", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    format: text("format").$type<"standard" | "modern" | "legacy" | "vintage" | "pauper" | "commander" | "pioneer" | "historic" | "penny" | "brawl" | "duel" | "oldschool" | "premodern" | "frontier" | "future">(),
+    collectionId: integer('collection_id').references(() => collections.id),
+})
+
+export const collectionRelation = relations(collections, ({ many, one }) => ({
+    cards: many(cards),
+    decks: one(decks)
 }));
 
 export const cardsRelations = relations(cards, ({ one }) => ({
