@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { collections, cards } from "@/db/schema";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Search } from "@/components/Search/search";
 
 export default function CollectionScreen() {
     const { id } = useLocalSearchParams();
@@ -16,7 +17,7 @@ export default function CollectionScreen() {
     const [showAddCardModal, toggleAddCardModal] = useState(false);
 
     const [cardName, setCardName] = useState('');
-    const [cardType, setCardType] = useState<any>('card');
+    const [cardQuantity, setCardQuantity] = useState(1);
     useEffect(() => {
         const getCollection = async () => {
             const collection = await db.query.collections.findFirst({
@@ -36,8 +37,19 @@ export default function CollectionScreen() {
         router.push('/');
     }
     const addCard = async () => {
-        const list = await db.insert(cards).values({ name: cardName, type: cardType, collectionId: collection.id }).returning();
-        setCards(prevCards => [...prevCards, list[0]]);
+        const [list] = await db.insert(cards).values({ name: cardName, quantity: cardQuantity, collectionId: collection.id }).returning();
+        if (list) {
+            console.log('New card created:', list)
+            setCards(prevCards => {
+                const updatedCards = [...prevCards, list];
+                console.log('Updated cards:', updatedCards);
+                return updatedCards;
+            });
+        }
+    }
+    const deleteCard = async (cardId: number) => {
+        await db.delete(cards).where(eq(cards.id, cardId));
+        setCards(prevCards => prevCards.filter(card => card.id !== cardId));
     }
     if (collection == null) return null;
     return (
@@ -67,8 +79,12 @@ export default function CollectionScreen() {
             >
                 <SafeAreaView>
                     <View>
-                        <TextInput placeholder="Name" onChangeText={setCardName}/>
-                        <TextInput placeholder="Type" onChangeText={setCardType}/>
+                        <TextInput placeholder="Quantity" onChangeText={(val) => setCardQuantity(Number(val))} />
+                        <Search onResultClick={async (id) => {
+                            const res = await fetch(`https://api.scryfall.com/cards/${id}`);
+                            const data = await res.json();
+                            setCardName(data.name);
+                        }} />
                     </View>
                     <Button title="Add" onPress={addCard} />
                 </SafeAreaView>
@@ -82,10 +98,14 @@ export default function CollectionScreen() {
                 <Text className="text-lg">Cards</Text>
                 <View>
                     <FontAwesome name="plus" size={24} color="black" onPress={() => toggleAddCardModal(true)}/>
-                    <FontAwesome name="trash" size={24} color="black"/>
                 </View>
                 {existingCards.map(card => (
-                    <Text key={card.id}>{card.front} - {card.back}</Text>
+                    <View className="flex flex-row gap-4" key={card.id}>
+                        <Text>{card.quantity} - {card.name}</Text>
+                        <FontAwesome name="trash" size={24} color="black" onPress={() => {
+                            deleteCard(card.id);
+                        }}/>
+                    </View>
                 ))}
             </View>
         </Layout>

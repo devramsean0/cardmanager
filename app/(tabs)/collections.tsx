@@ -56,7 +56,7 @@ export default function CollectionScreen() {
             </Modal>
             <Button title="Create Collection" onPress={() => setCreateModalVisible(true)} />
             <View>
-                {existingCollections.map(collection => (
+                {existingCollections.filter((val) => val.type == "collection").map(collection => (
                     <Link key={collection.id} href={`/collection/${collection.id}`}>
                         <Text>{collection.name}</Text>
                     </Link>
