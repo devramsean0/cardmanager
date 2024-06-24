@@ -7,6 +7,7 @@ import { router, Link } from "expo-router";
 
 export default function DecksScreen() {
     const [createModalVisible, setCreateModalVisible] = useState(false);
+    const [setupModalVisible, setSetupModalVisible] = useState(false);
     const [existingCollections, setCollections] = useState<any[]>([]);
     const [collectionName, setCollectionName] = useState('Name');
     const [collectionType, setCollectionType] = useState<'collection' | 'deck'>('deck');

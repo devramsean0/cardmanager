@@ -18,6 +18,8 @@ export default function CollectionScreen() {
     const [isDeck, toggleDeck] = useState(false);
     const [cardName, setCardName] = useState('');
     const [cardQuantity, setCardQuantity] = useState(1);
+    const [setupModalVisible, setSetupModalVisible] = useState(false);
+    const [deckFormat, setFormat] = useState<any>('commander');
     useEffect(() => {
         const getCollection = async () => {
             const collection = await db.query.collections.findFirst({
@@ -55,14 +57,14 @@ export default function CollectionScreen() {
     const toggleDeckState = async () => {
         if (isDeck == false) {
             const [deck] = await db.insert(decks).values({ collectionId: collection.id }).returning();
-            await db.update(collections).set({ type: 'deck' }).where(eq(collections.id, collection.id));
+            setCollection(await db.update(collections).set({ type: 'deck' }).where(eq(collections.id, collection.id)).returning());
             if (deck) {
                 console.log('Collection upgraded to deck', deck);
                 toggleDeck(true);
             }
         } else {
             const [deck] = await db.delete(decks).where(eq(decks.collectionId, collection.id)).returning();
-            await db.update(collections).set({ type: 'collection' }).where(eq(collections.id, collection.id));
+            setCollection(await db.update(collections).set({ type: 'collection' }).where(eq(collections.id, collection.id)).returning());
             if (deck) {
                 console.log('Deck downgraded to collection', deck);
                 toggleDeck(false);
@@ -107,12 +109,31 @@ export default function CollectionScreen() {
                     <Button title="Add" onPress={addCard} />
                 </SafeAreaView>
             </Modal>
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={setupModalVisible}
+                onRequestClose={() => {
+                    setSetupModalVisible(false);
+                }}>
+                    <Layout title="Setup Deck">
+                        <View>
+                            <TextInput placeholder="Format" onChangeText={setFormat}/>
+                            <Button title="Setup" onPress={async () => {
+                                const deck = await db.update(decks).set({ format: deckFormat }).where(eq(decks.collectionId, collection.id)).returning();
+                                console.log('Deck setup:', deck);
+                                setSetupModalVisible(false);
+                            }} />
+                        </View>
+                        <Button title="Close" onPress={() => setSetupModalVisible(false)} />
+                    </Layout>
+                </Modal>
             <View className="flex flex-row justify-between">
                 <FontAwesome name="edit" size={24} color="black" onPress={() => toggleEditModal(true)}/>
                 <FontAwesome name="trash" size={24} color="black" onPress={deleteCollection} />
-                <Button title={isDeck ? 'Downgrade to collection' : 'Upgrade to deck'} onPress={toggleDeckState} />
             </View>
-            <Text>{collection.name} - {collection.type}</Text>
+            <Button title={isDeck ? 'Downgrade to collection' : 'Upgrade to deck'} onPress={toggleDeckState} />
+            <Text>{collection.name} - {collection.type == "deck" ? `${collection.deck.format}` : `${collection.type}`}</Text>
             <View className="flex flex-col items-center">
                 <Text className="text-lg">Cards</Text>
                 <View>
