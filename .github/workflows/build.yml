@@ -40,7 +40,7 @@ jobs:
           overwrite: true
 
       - name: 🏗 Install ios-uploader
-        run: bun install -g ios-uploader
+        run: npm install -g ios-uploader
 
       - name: 📦 Upload ipa to TestFlight
         run: ios-uploader upload -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_PASSWORD }} -f ./builds/build.ipa
