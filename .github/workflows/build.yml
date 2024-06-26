@@ -2,9 +2,7 @@ on:
   push:
     tags:
       - "v*.*.*"
-    paths:
-      - "apps/mobile/**"
-      - ".github/workflows/expo.yaml"
+    workflow_dispatch:
 permissions:
   contents: write
 name: Expo Build
