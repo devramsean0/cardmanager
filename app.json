@@ -14,7 +14,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "cyou.sean.cardmanager"
+      "bundleIdentifier": "cyou.sean.cardmanager",
+      "entitlements": {
+        "aps-environment": "development"
     },
     "android": {
       "adaptiveIcon": {
