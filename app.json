@@ -17,6 +17,7 @@
       "bundleIdentifier": "cyou.sean.cardmanager",
       "entitlements": {
         "aps-environment": "development"
+      }
     },
     "android": {
       "adaptiveIcon": {
