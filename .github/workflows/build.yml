@@ -45,4 +45,9 @@ jobs:
         run: npm install -g ios-uploader
 
       - name: 📦 Upload ipa to TestFlight
-        run: ios-uploader upload -u ${{ secrets.APPLE_ID }} -p nmqh-dvqd-dpue-oimi -f ./builds/build.ipa
+        shell: bash
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          ios-uploader upload -u $APPLE_ID -p $APPLE_PASSWORD -f ./builds/build.ipa
